@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Display</title>
+
+  <!-- Google Fonts for better typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1d2671, #c33764); /* Dark blue to magenta gradient */
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 500;
+      color: #fff;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      text-align: left;
+      padding: 12px;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background-color: #4A90E2; /* Soft blue for the headers */
+      color: #fff;
+      font-weight: 500;
+    }
+
+    td {
+      background-color: #e1f5fe; /* Light cyan for table rows */
+      transition: background-color 0.3s ease;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #b3e5fc; /* Light blue for even rows */
+    }
+
+    tr:hover td {
+      background-color: #ffd54f; /* Highlighted yellow on hover */
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      th, td {
+        font-size: 0.8rem;
+        padding: 10px;
+      }
+    }
+
+    /* Animation for smooth row appearance */
+    tbody tr {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.5s forwards ease-out;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Commodity Price Report</h1>
+
+<table id="dataTable">
+  <thead>
+  <tr>
+    <th>Date</th>
+    <th>State</th>
+    <th>Rice</th>
+    <th>Wheat</th>
+    <th>Atta</th>
+    <th>Gram Dal</th>
+    <th>Tur Arhar Dal</th>
+    <th>Urad Dal</th>
+    <th>Moong Dal</th>
+    <th>Masoor Dal</th>
+    <th>Sugar</th>
+    <th>Milk</th>
+    <th>Groundnut Oil</th>
+    <th>Mustard Oil</th>
+    <th>Vanaspati</th>
+    <th>Soya Oil</th>
+    <th>Sunflower Oil</th>
+    <th>Palm Oil</th>
+    <th>Gur</th>
+    <th>Tea Loose</th>
+    <th>Salt Pack</th>
+    <th>Potato</th>
+    <th>Onion</th>
+    <th>Tomato</th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+<script>
+  // Get the URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const startDate = urlParams.get('startDate');
+  const endDate = urlParams.get('endDate');
+
+  // Fetch the data.json file
+  fetch('/data.json')
+    .then(response => response.json())
+    .then(data => {
+      const tableBody = document.querySelector("#dataTable tbody");
+      tableBody.innerHTML = "";  // Clear existing rows
+
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      // Get unique dates in the selected range
+      let dateRange = [];
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        dateRange.push(new Date(d).toISOString().split('T')[0]); // Format date as YYYY-MM-DD
+      }
+
+      let lastDate = null;  // Variable to track the last displayed date
+
+      dateRange.forEach(rangeDate => {
+        // Filter data for each date in the selected range
+        const filteredData = data.filter(item => item.date === rangeDate);
+
+        if (filteredData.length === 0) {
+          // If no data is available for the date, show a "No data" row
+          const noDataRow = document.createElement("tr");
+          noDataRow.innerHTML = `
+            <td>${rangeDate}</td>
+            <td colspan="24">No data available for this date</td>
+          `;
+          tableBody.appendChild(noDataRow);
+        } else {
+          // If data is available for the date, display the rows
+          filteredData.forEach(item => {
+            const row = document.createElement("tr");
+
+            // Always add a date column, either with the actual date or empty to align
+            let dateCell = '';
+            if (item.date !== lastDate) {
+              dateCell = `<td>${item.date}</td>`;
+              lastDate = item.date;
+            } else {
+              dateCell = `<td></td>`;  // Empty cell for rows with the same date
+            }
+
+            row.innerHTML = `
+              ${dateCell}
+              <td>${item.state}</td>
+              <td>${item.rice ?? 'N/A'}</td>
+              <td>${item.wheat ?? 'N/A'}</td>
+              <td>${item.atta ?? 'N/A'}</td>
+              <td>${item.gramDal ?? 'N/A'}</td>
+              <td>${item.turArharDal ?? 'N/A'}</td>
+              <td>${item.uradDal ?? 'N/A'}</td>
+              <td>${item.moongDal ?? 'N/A'}</td>
+              <td>${item.masoorDal ?? 'N/A'}</td>
+              <td>${item.sugar ?? 'N/A'}</td>
+              <td>${item.milk ?? 'N/A'}</td>
+              <td>${item.groundnutOil ?? 'N/A'}</td>
+              <td>${item.mustardOil ?? 'N/A'}</td>
+              <td>${item.vanaspati ?? 'N/A'}</td>
+              <td>${item.soyaOil ?? 'N/A'}</td>
+              <td>${item.sunflowerOil ?? 'N/A'}</td>
+              <td>${item.palmOil ?? 'N/A'}</td>
+              <td>${item.gur ?? 'N/A'}</td>
+              <td>${item.teaLoose ?? 'N/A'}</td>
+              <td>${item.saltPack ?? 'N/A'}</td>
+              <td>${item.potato ?? 'N/A'}</td>
+              <td>${item.onion ?? 'N/A'}</td>
+              <td>${item.tomato ?? 'N/A'}</td>
+            `;
+            tableBody.appendChild(row);
+          });
+        }
+      });
+    })
+    .catch(error => console.error('Error loading data:', error));
+
+</script>
+</body>
+</html>

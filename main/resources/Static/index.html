@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Range</title>
+
+    <!-- Google Fonts for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-attachment: fixed;
+            color: #fff;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        header h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            font-size: 3rem;
+            color: #fff;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 100%;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        form:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+            color: #fff;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #333;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        input[type="date"]:focus {
+            background: rgba(255, 255, 255, 1);
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            color: #fff;
+            background: linear-gradient(135deg, #4CAF50 0%, #43A047 100%);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #43A047 0%, #388E3C 100%);
+            transform: scale(1.05);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Add responsiveness */
+        @media (max-width: 600px) {
+            form {
+                padding: 20px;
+                max-width: 90%;
+            }
+
+            h2 {
+                font-size: 2.5rem;
+            }
+
+            input[type="date"], button {
+                font-size: 1rem;
+            }
+        }
+
+        /* Subtle animation for smooth appearance */
+        body {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Department of Consumer Affairs</h1>
+</header>
+
+<div>
+    <h2>Date Range</h2>
+    <form id="dateForm">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" required>
+
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" required>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById("dateForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+
+        // Redirect to the dataDisplay.html page with the selected date range
+        window.location.href = `dataDisplay.html?startDate=${startDate}&endDate=${endDate}`;
+    });
+</script>
+
+</body>
+
+</html>
